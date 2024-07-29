@@ -10,22 +10,34 @@ class RedshiftGUI:
         master.minsize(300, 300)
         master.maxsize(300, 300)
         self.title = Label(master, text="Redshift GUI", font=("sans serif",25))
-        self.title.pack()
         self.close_button = Button(master, text="Close", background="red", command=master.quit)
-        self.close_button.pack()
         self.reset_button = Button(master, text="Reset", command=self.rs.reset)
-        self.reset_button.pack()
 
         self.label_temperature = Label(master, text="Temperature")
-        self.label_temperature.pack()
         self.value_temperature = DoubleVar()
         # on scale change
         self.scale = Scale(master, from_=1000, to=10000, orient=HORIZONTAL, variable=self.value_temperature, length=200)
-        self.scale.pack()
-        self.change_color_button = Button(master, text="Change Color", background=self.convert_temperature_to_color_hex(),command=lambda: self.rs.change_color(self.value_temperature.get()))
-        self.change_color_button.pack()
-        self.value_temperature.trace_add("write", lambda *args: self.change_color_button.config(background=self.convert_temperature_to_color_hex()))
+        self.change_button = Button(master,
+                                          text="Change",
+                                          background=self.convert_temperature_to_color_hex(),
+                                          command=lambda: self.rs.change_color(self.value_temperature.get(), self.value_brightness.get()))
+        self.value_temperature.trace_add("write", lambda *args: self.change_button.config(background=self.convert_temperature_to_color_hex()))
 
+        self.label_brightness = Label(master, text="Brightness")
+        self.value_brightness = DoubleVar(value=1)
+        self.brightness_scale = Scale(master, from_=0, to=1, resolution=0.05,
+                                      variable=self.value_brightness,
+                                      orient=HORIZONTAL, length=200)
+
+        # layout packing
+        self.title.pack()
+        self.close_button.pack()
+        self.reset_button.pack()
+        self.label_brightness.pack()
+        self.brightness_scale.pack()
+        self.label_temperature.pack()
+        self.scale.pack()
+        self.change_button.pack()
 
     def run(self):
         return self.master.mainloop()
