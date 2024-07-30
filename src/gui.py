@@ -10,7 +10,7 @@ class RedshiftGUI:
         master.minsize(300, 300)
         master.maxsize(300, 300)
         self.title = Label(master, text="Redshift GUI", font=("sans serif",25))
-        self.close_button = Button(master, text="Close", background="red", command=master.quit)
+        self.close_button = Button(master, text="Close", background="red", foreground="white", command=master.quit)
         self.reset_button = Button(master, text="Reset", command=self.rs.reset)
 
         self.label_temperature = Label(master, text="Temperature")
