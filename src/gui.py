@@ -1,6 +1,6 @@
 from tkinter import *
 import math
-from redshift import Redshift
+from src.redshift import Redshift
 
 class RedshiftGUI:
     def __init__(self, master):

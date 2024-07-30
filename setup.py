@@ -1,3 +1,5 @@
+# pyinstaller -F src/main.py src/gui.py src/redshift.py  --name redshift-gui
+
 import os
 from setuptools import setup
 

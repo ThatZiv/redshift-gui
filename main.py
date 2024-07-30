@@ -1,5 +1,5 @@
 from tkinter import Tk
-import gui
+import src.gui as gui
 
 if __name__ == "__main__":
     # auto install tkinter if not installed
