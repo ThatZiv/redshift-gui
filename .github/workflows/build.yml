@@ -18,16 +18,30 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: 3.8
+      - name: Cache dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
 
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          apt update -y && apt upgrade -y
+          apt install python-tk -y
+          pip install pyinstaller
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          apt update -y && apt upgrade -y
+          apt install python-tk -y
           pip install pyinstaller
 
       - name: Build
         run: |
-          pyinstaller --F main.py --paths src --name redshift-gui
+          pyinstaller -F main.py --paths src --name redshift-gui
 
       - name: Upload artifact
         uses: actions/upload-artifact@v2
