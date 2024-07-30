@@ -29,6 +29,12 @@ jobs:
         run: |
           pyinstaller --F main.py --paths src --name redshift-gui
 
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: redshift-gui
+          path: dist/redshift-gui
+
     #   - name: Create Release
     #     id: create_release
     #     uses: actions/create-release@v1
