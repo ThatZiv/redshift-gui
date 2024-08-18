@@ -1,10 +1,17 @@
 from tkinter import *
 import math
+from enum import Enum
 from src.redshift import Redshift
+from src.db import DB
+
+class Settings(Enum):
+    TEMPERATURE="temp"
+    BRIGHTNESS="brightness"
 
 class RedshiftGUI:
     def __init__(self, master):
         self.rs = Redshift()
+        self.db = DB("main.db")
         self.master = master
         master.title("Redshift GUI")
         master.minsize(300, 300)
@@ -14,17 +21,17 @@ class RedshiftGUI:
         self.reset_button = Button(master, text="Reset", command=self.rs.reset)
 
         self.label_temperature = Label(master, text="Temperature")
-        self.value_temperature = DoubleVar()
+        self.value_temperature = IntVar(value=self.db.get(Settings.TEMPERATURE.value) or 6500)
         # on scale change
         self.scale = Scale(master, from_=1000, to=10000, orient=HORIZONTAL, variable=self.value_temperature, length=200)
         self.change_button = Button(master,
                                           text="Change",
                                           background=self.convert_temperature_to_color_hex(),
-                                          command=lambda: self.rs.change_color(self.value_temperature.get(), self.value_brightness.get()))
+                                          command=lambda: self.on_change_button())
         self.value_temperature.trace_add("write", lambda *args: self.change_button.config(background=self.convert_temperature_to_color_hex()))
 
         self.label_brightness = Label(master, text="Brightness")
-        self.value_brightness = DoubleVar(value=1)
+        self.value_brightness = DoubleVar(value=self.db.get(Settings.BRIGHTNESS.value) or 1.0)
         self.brightness_scale = Scale(master, from_=0, to=1, resolution=0.05,
                                       variable=self.value_brightness,
                                       orient=HORIZONTAL, length=200)
@@ -38,6 +45,12 @@ class RedshiftGUI:
         self.label_temperature.pack()
         self.scale.pack()
         self.change_button.pack()
+        self.on_change_button() # init change based on stored values (or default values)
+
+    def on_change_button(self):
+        self.rs.change_color(self.value_temperature.get(), self.value_brightness.get())
+        self.db.set(Settings.TEMPERATURE.value, self.value_temperature.get())
+        self.db.set(Settings.BRIGHTNESS.value, self.value_brightness.get())
 
     def run(self):
         return self.master.mainloop()

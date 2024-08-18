@@ -33,9 +33,13 @@ jobs:
           sudo apt install python3-tk -y
           pip install pyinstaller
 
+      - name: Run tests
+        run: |
+          python -m unittest discover -s tests
+
       - name: Build
         run: |
-          pyinstaller -F main.py --paths src --name redshift-gui
+          pyinstaller main.py --paths src --icon=.github/logo.ico --name redshift-gui
 
       - name: Upload artifact
         uses: actions/upload-artifact@v2
