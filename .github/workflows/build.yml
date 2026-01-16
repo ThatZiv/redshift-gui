@@ -45,7 +45,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: redshift-gui-v${{ github.run_number }}
-          path: dist/redshift-gui
+          path: dist/redshift-gui/
 
     #   - name: Create Release
     #     id: create_release
