@@ -42,7 +42,7 @@ jobs:
           pyinstaller main.py --paths src --icon=.github/logo.ico --name redshift-gui
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: redshift-gui-v${{ github.run_number }}
           path: dist/redshift-gui/
